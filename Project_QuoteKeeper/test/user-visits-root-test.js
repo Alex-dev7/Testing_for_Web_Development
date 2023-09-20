@@ -14,12 +14,12 @@ describe('User visits project root', () => {
         browser.setValue('input[id=attribuited]', attribuited)
         browser.setValue('input[id=source]', source)
         browser.click('input[type=submit]')
+
+            // Verification
+      assert.include(browser.getText("#quotes"), quote)
+      assert.include(browser.getText("#quotes"), attribuited)
+      assert.include(browser.getText("#quotes"), source)
       })
-  
-      // Verification
-      assert.includes(browser.getText("#quotes"), quote)
-      assert.includes(browser.getText("#quotes"), attribuited)
-      assert.includes(browser.getText("#quotes"), source)
   
     })
   })
