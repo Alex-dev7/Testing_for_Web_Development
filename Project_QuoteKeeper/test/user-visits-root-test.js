@@ -15,7 +15,7 @@ describe('User visits project root', () => {
         browser.setValue('input[id=source]', source)
         browser.click('input[type=submit]')
 
-            // Verification
+        // Verification
       assert.include(browser.getText("#quotes"), quote)
       assert.include(browser.getText("#quotes"), attribuited)
       assert.include(browser.getText("#quotes"), source)
