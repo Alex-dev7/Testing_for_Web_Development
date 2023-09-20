@@ -47,4 +47,4 @@ describe('User visits root', () => {
 
 // Because feature tests typically hit every layer of a developer’s stack, they are slower than tests at lower layers, and errors thrown in feature tests can be difficult to interpret and provide little guidance on what the developer can do to resolve them.
 
-// Their value, however, is in developer confidence that the software functions as expected.
+// Their value, however, is in developer confidence that the software functions as expected
