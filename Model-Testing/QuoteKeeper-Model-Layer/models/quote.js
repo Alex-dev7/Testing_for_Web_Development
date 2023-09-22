@@ -1,7 +1,9 @@
-const mongoose = require('../databse.js');
+const { mongoose} = require('../database.js');
 
 const quoteSchema = new mongoose.Schema({
-  quote: String
+  quote: String,
+  attributed:  String,
+  source: String
 })
 
 const Quote = mongoose.model('Quote', quoteSchema)

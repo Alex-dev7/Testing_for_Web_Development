@@ -6,10 +6,21 @@ const databaseUrl = process.env.DATABASE_URL || `mongodb://localhost/quote-keepe
 const options= {
   useMongoClient: true,
 };
+const connectAndDrop = async () => {
+    await mongoose.connect(databaseUrl, options);
+    await mongoose.connection.db.dropDatabase();
+}
+const disconnect = async () => {
+     await mongoose.disconnect();
+}
+
 
 module.exports = {
   mongoose,
   databaseUrl,
   options,
+  disconnect,
+  connectAndDrop
 };
+
 
