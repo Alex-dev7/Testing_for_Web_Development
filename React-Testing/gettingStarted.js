@@ -25,3 +25,26 @@
 // npm test
 
 // This will launch the test in watch mode, allowing the test to re-run every time the file is saved! You’ll need to type q in the terminal to quit out of the watch mode.
+
+
+// 
+
+// --------   Configuring Jest
+
+// Before we move on to actually writing our tests, we should cover a few best practices.
+
+// By default, each test produces the terminal output that we saw in the previous exercise. Jest allows us to customize this output by using command line flags. Though there are many command-line flags (https://jestjs.io/docs/cli#reference), one of the most commonly used is the --coverage flag:
+
+// npm test -- --coverage
+
+// Make sure to note the double dash between the npm test and --coverage. This is to separate the arguments from the test command itself. This --coverage flag allows us to get a report of which lines of our code were actually tested. In addition to being outputted in the terminal, this report becomes available in a directory named coverage/ that is created at runtime.
+
+// This report can help us ensure our code has been thoroughly tested. From the report, we can see that there are four categories of our code that are being analyzed:
+
+//  -Statement // coverage analyzes the percentage of the program’s statements that have been executed.
+//  -Branch // coverage analyzes the percentage of the program’s edge cases that have been executed.
+//  -Function //  coverage analyzes the percent of the program’s functions that have been called during testing.
+//  -Line // coverage analyzes the percentage of the program’s executable lines in the source file that have been executed.
+
+
+// Currently, each of those sections will show up at 0% coverage which makes sense – we haven’t written any tests yet! Strategies for interpreting and analyzing this coverage report are outside of the scope of this lesson, however, you should keep an eye on how this report changes as we continue to write our tests.
