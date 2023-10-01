@@ -5,7 +5,9 @@ import {
     countryListLookup, 
     getResponse 
   } from './language_spoken.js';
-  
+
+
+
   it("converts array of country data objects to array of countries", ()=>{
       //arrange
       const inputObject = [
@@ -26,6 +28,21 @@ import {
       expect(actualValue[3]).not.toBeDefined()
   })
 
+
+    // Notice that we need to pass `done` as an argument to the `it()` function to signal that the test will perform an async operation.
+    it("correctly fetches a list of countries", (done) => {
+        const inputLanguageCode = "es";
+        const expectedValue = "Argentina";
+      
+        countryListLookup(inputLanguageCode, (result) => {
+            try {
+                expect(result).toBeDefined();
+                done()
+              } catch(error) {
+                done(error)
+              }
+        });
+      });
 
 //   Let’s go over the matchers used in this example:
 
