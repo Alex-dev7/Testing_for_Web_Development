@@ -1,7 +1,7 @@
 import React from "react";
 import { Thought } from "./Thought.js";
-
-
+import { AddThoughtForm } from "./AddThoughtForm.js";
+import "regenerator-runtime/runtime";
 // 1 ----  The Render and Screen Objects
 
 // Just like Jest, create-react-app includes React Testing Library by default. Since we initiated our project using create-react-app, we can immediately start utilizing React Testing Library without any additional setup.
@@ -13,7 +13,7 @@ import { Thought } from "./Thought.js";
 
 
 // Import render and screen here
-import {render, screen} from '@testing-library/react'
+import {waitFor, render, screen} from '@testing-library/react'
 /// import jest-dom
 import '@testing-library/jest-dom'
 
@@ -64,3 +64,107 @@ it("Should have header text Passing Thoughts", () => {
 
 // 3 --- Different Query Methods
 // Now that we know how to perform queries with .getByX methods, it is time for us to move on to the other query method variants. RTL has another category of query methods called .queryByX.
+
+
+// 4 ---- Querying Asynchronous Components
+// Now, let’s discuss querying for asynchronous elements. Imagine we’re testing an application comprising components that perform asynchronous operations, such as fetching data from an API, triggering animations, or executing delayed rendering. How would we write tests that will wait for these elements to appear?
+
+// We can use .findByX methods. The .findByX methods are used to query for asynchronous elements, which will eventually appear in the DOM. The .findByX methods work by returning a Promise, which resolves when the queried element renders in the DOM. As such, the async/await keywords can be used to enable asynchronous logic.
+
+// Let’s look back at the program again. Recall that the header has a 500ms delay. We want to confirm that the header will display the text 'Goodbye' after the button is clicked.
+
+// Changes header text after interval of 500ms
+const handleClick = () => {
+    setTimeout(() => {
+        setText('Goodbye!');
+    }, 500);
+  };
+
+//   We can write our test like this. This example uses the userEvent library, which will be covered in depth in the next exercise, to simulate clicking on the button.
+
+// import App from './components/App';
+// import { render, screen } from '@testing-library/react';
+
+it('should show text content as Goodbye', async () => {
+  // Render App
+  render(<App />);
+  // Extract button node 
+  const button = screen.getByRole('button');
+  // click button
+  userEvent.click(button);
+  // Wait for the text 'Goodbye!' to appear
+  const header = await screen.findByText('Goodbye!');
+  // Assert header to exist in the DOM
+  expect(header).toBeInTheDocument();
+});
+
+
+// In the example above, we use .findByText() since the 'Goodbye!' message does not render immediately. This is because our handleClick() function changes the text after an interval of 500ms. So, we have to wait a bit before the new text is rendered in the DOM.
+
+// Observe the async and await keywords in the example above. Remember that findBy methods return a Promise, and thus, the callback function that carries out the unit test must be identified as async while the screen.findByText() method must be preceded by await.
+
+
+it("Should show new thought to be present", async () => {
+    render(<App />);
+  
+    // The code below mimics a user posting a thought with text 'Oreos are delicious'
+    const addThoughtInput = screen.getByRole("input");
+    const addButton = screen.getByRole("submit");
+    userEvent.type(addThoughtInput, "Oreos are delicious");
+    userEvent.click(addButton);
+  
+    // Modify testing logic here
+    const thought = await screen.findByText("Oreos are delicious");
+    expect(thought).toBeInTheDocument();
+  });
+
+
+
+//  5 ---- Mimicking User Interactions
+// So far, we’ve learned how to query and extract the different DOM nodes from our React components. Now, it’s time for us to learn how to mimic user interactions, such as clicking a checkbox and typing text. Once again, this entire process has been made easier for us with the help of another library in the @testing-library suite: @testing-library/user-event.
+
+// This library exports a single object, userEvent, that can be imported in a test file like so:
+
+
+import userEvent from '@testing-library/user-event';
+
+// The userEvent object contains many built-in methods that allow us to mimic user interactions. Typically, they follow the same syntax pattern:
+
+userEvent.interactionType(nodeToInteractWith);
+
+
+// Here is an example where we mimic a user filling in a text box. Note that in this case, a second argument is provided as the text to be typed into the box.
+
+
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import '@testing-library/jest-dom';
+
+const GreetingForm = () => {
+  return(
+    <form>
+      <label htmlFor="greeting">
+        Greeting:
+      </label>
+      <input type="text" id="greeting" />
+      <input type="submit" value="Submit" />
+    </form>
+  );
+};
+
+it('should show text content as Hey Mack!', () => {
+  // Render the component to test
+  render(<GreetingForm />);
+  // Extract the textbox component
+  const textbox = screen.getByRole('textbox');
+  // Simulate typing 'Hey Mack!'
+  userEvent.type(textbox, 'Hey Mack!');
+  // Assert textbox has text content 'Hey Mack!'
+  expect(textbox).toHaveValue('Hey Mack!');
+});
+
+
+// In the example above, the userEvent.type() method is used, which accepts a DOM node to interact with (textbox) and a string to type into that node (`’Hey Mack!’).
+
+// The userEvent object has methods for simulating clicks (userEvent.click()), hovering (userEvent.hover()), and much more. Once again, instead of memorizing all of these, it is recommended that you read the docs to find the method best suited for your needs.
