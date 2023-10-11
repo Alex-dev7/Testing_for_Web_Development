@@ -168,3 +168,79 @@ it('should show text content as Hey Mack!', () => {
 // In the example above, the userEvent.type() method is used, which accepts a DOM node to interact with (textbox) and a string to type into that node (`’Hey Mack!’).
 
 // The userEvent object has methods for simulating clicks (userEvent.click()), hovering (userEvent.hover()), and much more. Once again, instead of memorizing all of these, it is recommended that you read the docs to find the method best suited for your needs.
+
+
+it("Should add a new thought", () => {
+  render(<App />);
+  // Grab the text box and the submit button.
+  const input = screen.getByRole("textbox");
+  const submit = screen.getByText("Add");
+
+  // TODO: Add testing logic to simulate user interactions here
+  userEvent.type(input, "Did I forget my keys?")
+  userEvent.click(submit)
+  // Assert that the thought appears
+  const thought = screen.getByText("Did I forget my keys?");
+  expect(thought).toBeInTheDocument();
+});
+
+
+
+
+//  ----- The waitFor() method
+
+
+// How would you test that the header is removed? Using screen.findByX() methods won’t work because there won’t be an element to query once it’s removed! Using only screen.queryByX() methods won’t work either, as the component is removed asynchronously.
+
+// Fortunately, RTL provides another function that can be used for asynchronous testing that will be perfect for this scenario - the waitFor() function. In order to use this function, we need to import it from @testing-library/react.
+
+
+
+import { waitFor } from '@testing-library/react';
+
+
+// As with the other async functions, the waitFor() function returns a Promise, so we have to preface its call with the await keyword. It takes a callback function as an argument where we can make asynchronous function calls, perform queries, and/or run assertions.
+
+await waitFor(() => {
+  expect(someAsyncMethod).toHaveBeenCalled();
+  const someAsyncNode = screen.getByText('hello world');
+  expect(someAsyncNode).toBeInTheDocument();
+});
+
+
+
+// Now, let’s get back to the example. To test that a component disappears asynchronously, we can combine the waitFor() function with .queryByX() methods:
+
+
+it('should remove header display', async () => {
+  // Render Header
+  render(<Header/>)
+  // Extract button node 
+  const button = screen.getByRole('button');
+  // click button
+  userEvent.click(button);
+
+  // Wait for the element to be removed asynchronously
+  await waitFor(() => {
+    const header = screen.queryByText('Hey Everybody');
+    expect(header).toBeNull()
+  })
+});
+
+
+
+// this exercice example
+
+it("Should show Thought to be removed", async () => {
+  render(<App />);
+  const input = screen.getByRole("input");
+  const submit = screen.getByRole("submit");
+  userEvent.type(input, "I have to call my mom.");
+  userEvent.click(submit);
+
+  //Write your test logic here!
+  await waitFor(() => {
+    const thought = screen.queryByText('I have to call my mom.')
+    expect(thought).toBeNull()
+  })
+});
