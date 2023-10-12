@@ -21,28 +21,36 @@ const CheckoutForm = () => {
     <form onSubmit={handleSubmit}>
       <div>
         Name:
-        <input id="name" name="name" type="text" onChange={handleChange} />
+        <label htmlFor="name">
+           <input id="name" name="name" type="text" onChange={handleChange} />
+        </label>
       </div>
       <div>
         Email:
-        <input id="email" name="email" type="email" onChange={handleChange} />
+        <label htmlFor="email">
+            <input id="email" name="email" type="email" onChange={handleChange} />
+        </label>
       </div>
       <div>
         Address:
-        <input
-          id="address"
-          name="address"
-          type="text"
-          onChange={handleChange}
-        />
+        <label htmlFor="address">
+            <input
+            id="address"
+            name="address"
+            type="text"
+            onChange={handleChange}
+            />
+        </label>
       </div>
       <div>
+      <label htmlFor="payment">
         Payment Method:
-        <select id="payment" name="payment" onChange={handleChange}>
-          <option>Credit Card</option>
-          <option>Debit Card</option>
-          <option>PayPal</option>
-        </select>
+          <select id="payment" name="payment" onChange={handleChange}>
+            <option>Credit Card</option>
+            <option>Debit Card</option>
+            <option>PayPal</option>
+          </select>
+        </label>
       </div>
       <div>
         <button type="submit">Checkout</button>
